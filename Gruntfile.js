@@ -47,12 +47,12 @@ module.exports = function(grunt) {
         src: 'Gruntfile.js'
       },
       lib_test: {
-        src: ['test/**/*.js']
+        src: ['test/*.js']
       }
     },
     concat: {
       built: {
-        src: ['lib/combinations.js', 'fdalgos-wt.js'],
+        src: ['lib/util.js', 'lib/helpers.js', 'lib/minimalCover.js', 'lib/bernstein.js', 'lib/bcnf.js', 'fdalgos-wt.js'],
         dest: 'build/fdalgos-building.js',
       },
     },
@@ -83,7 +83,10 @@ module.exports = function(grunt) {
         src: ['build/fdalgos-building.js'], // source files array (supports minimatch)
         dest: 'build/fdalgos-wt.js', // destination directory or file
         replacements: [{
-          from: /^var [^ ]+ = require\('lib\/.+$/gm, // string replacement
+          from: /^var [^ ]+ = require\('\..+$/gm, // string replacement
+          to: ''
+        },{
+          from: /require\(\'\..+$/gm, // string replacement
           to: ''
         }, {
           from: /^module.exports = .*;$/gm, // regex replacement ('Fooo' to 'Mooo')
@@ -113,7 +116,8 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'mochaTest']);
-  grunt.registerTask('deploywt', ['concat', 'replace', 'shell:deploywt', 'clean']);
+  grunt.registerTask('buildwt', ['clean', 'concat', 'replace']);
+  grunt.registerTask('deploywt', ['clean', 'concat', 'replace', 'shell:deploywt', 'clean']);
   grunt.registerTask('test', 'mochaTest');
 
 };

@@ -1,4 +1,4 @@
-fdalgos.js
+fdAlgos.js
 ===
 
 [![Build Status](https://travis-ci.org/selbyk/fdalgos.js.svg)](https://travis-ci.org/selbyk/fdalgos.js)
@@ -21,6 +21,14 @@ $ grunt test
 Webtask.io
 ---
 
+## Build
+
+Concatenates ./lib/* and fdalgos-wt.js, replaces module exports, and runs wt create
+
+```bash
+$ grunt buildwt
+```
+
 ## Deployment
 
 Concatenates ./lib/* and fdalgos-wt.js, replaces module exports, and runs wt create
@@ -41,11 +49,78 @@ Host: webtask.it.auth0.com
 Content-Type: application/json
 Cache-Control: no-cache
 
-{ "attrs": ["a","b","c"] }
+{ "attrs": ["A","B","C","D","E"], "fds": [ [["A","B"], ["E"]], [["A","D"], ["B"]], [["B"], ["C"]], [["C"], ["D"]] ] }
 ```
 
 #### Response
 
 ```json
-{"combinations":[["a"],["b"],["c"],["a","b"],["a","c"],["b","c"],["a","b","c"]]}
+{
+    "specialKeys": {
+        "necessary": [
+            "A"
+        ],
+        "useless": [
+            "E"
+        ],
+        "middleGround": [
+            "B",
+            "C",
+            "D"
+        ],
+        "candidate": [
+            [
+                "B",
+                "A"
+            ],
+            [
+                "C",
+                "A"
+            ],
+            [
+                "D",
+                "A"
+            ]
+        ]
+    },
+    "3nf": [
+        [
+            "A",
+            "B",
+            "E"
+        ],
+        [
+            "A",
+            "D",
+            "B"
+        ],
+        [
+            "B",
+            "C"
+        ],
+        [
+            "C",
+            "D"
+        ],
+        [
+            "B",
+            "A"
+        ]
+    ],
+    "bcnf": [
+        [
+            "B",
+            "C"
+        ],
+        [
+            "C",
+            "D"
+        ],
+        [
+            "A",
+            "B",
+            "E"
+        ]
+    ]
+}
 ```
