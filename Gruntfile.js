@@ -1,50 +1,47 @@
 /*global module:false*/
 module.exports = function(grunt) {
-
   // Project configuration.
   grunt.initConfig({
-      // Task configuration.
-      jshint: {
-        options: {
-          "globals": {
-            "jasmine": false,
-            "spyOn": false,
-            "it": false,
-            "console": false,
-            "describe": false,
-            "expect": false,
-            "beforeEach": false,
-            "waits": false,
-            "waitsFor": false,
-            "runs": false
-          },
-
-          "node": true,
-          "esnext": true,
-          "browser": true,
-
-          "boss": false,
-          "curly": false,
-          "debug": false,
-          "devel": false,
-          "eqeqeq": true,
-          "evil": true,
-          "forin": false,
-          "immed": true,
-          "laxbreak": false,
-          "newcap": true,
-          "noarg": true,
-          "noempty": false,
-          "nonew": false,
-          "nomen": false,
-          "onevar": true,
-          "plusplus": false,
-          "regexp": false,
-          "undef": true,
-          "sub": true,
-          "strict": false,
-          "white": true,
-          "unused": true
+    // Task configuration.
+    jshint: {
+      options: {
+        "globals": {
+          "jasmine": false,
+          "spyOn": false,
+          "it": false,
+          "console": false,
+          "describe": false,
+          "expect": false,
+          "beforeEach": false,
+          "waits": false,
+          "waitsFor": false,
+          "runs": false
+        },
+        "node": true,
+        "esnext": true,
+        "browser": true,
+        "boss": false,
+        "curly": false,
+        "debug": false,
+        "devel": false,
+        "eqeqeq": true,
+        "evil": true,
+        "forin": false,
+        "immed": true,
+        "laxbreak": false,
+        "newcap": true,
+        "noarg": true,
+        "noempty": false,
+        "nonew": false,
+        "nomen": false,
+        "onevar": true,
+        "plusplus": false,
+        "regexp": false,
+        "undef": true,
+        "sub": true,
+        "strict": false,
+        "white": true,
+        "unused": true
       },
       gruntfile: {
         src: 'Gruntfile.js'
@@ -52,6 +49,12 @@ module.exports = function(grunt) {
       lib_test: {
         src: ['test/**/*.js']
       }
+    },
+    concat: {
+      built: {
+        src: ['lib/combinations.js', 'fdalgos-wt.js'],
+        dest: 'build/fdalgos-building.js',
+      },
     },
     watch: {
       gruntfile: {
@@ -74,17 +77,43 @@ module.exports = function(grunt) {
         },
         src: ['test/**/*.js']
       }
+    },
+    replace: {
+      buildreplace: {
+        src: ['build/fdalgos-building.js'], // source files array (supports minimatch)
+        dest: 'build/fdalgos-wt.js', // destination directory or file
+        replacements: [{
+          from: /^var [^ ]+ = require\('lib\/.+$/gm, // string replacement
+          to: ''
+        }, {
+          from: /^module.exports = .*;$/gm, // regex replacement ('Fooo' to 'Mooo')
+          to: '' //'M$2'
+        }]
+      }
+    },
+    shell: {
+      deploywt: {
+        command: 'wt create ./build/fdalgos-wt.js'
+      }
+    },
+    clean: {
+      js: ["build/*.js"] //, "!path/to/dir/*.min.js"]
     }
   });
 
-// These plugins provide necessary tasks.
-grunt.loadNpmTasks('grunt-contrib-jshint');
-grunt.loadNpmTasks('grunt-contrib-watch');
-// Add the grunt-mocha-test tasks.
-grunt.loadNpmTasks('grunt-mocha-test');
+  // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-shell');
+  // Add the grunt-mocha-test tasks.
+  grunt.loadNpmTasks('grunt-mocha-test');
 
-// Default task.
-grunt.registerTask('default', ['jshint', 'mochaTest']);
-grunt.registerTask('test', 'mochaTest');
+  // Default task.
+  grunt.registerTask('default', ['jshint', 'mochaTest']);
+  grunt.registerTask('deploywt', ['concat', 'replace', 'shell:deploywt', 'clean']);
+  grunt.registerTask('test', 'mochaTest');
 
 };
