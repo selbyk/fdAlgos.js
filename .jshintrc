@@ -11,11 +11,9 @@
     "waitsFor": false,
     "runs": false
   },
-
   "node": true,
   "esnext": true,
   "browser": true,
-
   "boss": false,
   "curly": false,
   "debug": false,
