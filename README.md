@@ -1,7 +1,7 @@
 fdAlgos.js
 ===
 
-[![Build Status](https://travis-ci.org/selbyk/fdalgos.js.svg)](https://travis-ci.org/selbyk/fdalgos.js)
+[![Build Status](https://travis-ci.org/selbyk/fdAlgos.js.svg)](https://travis-ci.org/selbyk/fdAlgos.js)
 
 Functional dependency algorithms for relational database schema normalization
 
