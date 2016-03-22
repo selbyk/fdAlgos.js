@@ -82,6 +82,49 @@ describe('minCovers', function() {
     });
     done();
   });
+  it('should return correct array of combinations when given array', function(done) {
+    // Set of attributes
+    var X = ['A', 'B', 'C'];
+
+    // Set of functional dependencies
+    var F = [
+      [
+        ['A'],
+        [ 'C']
+      ],
+      [
+        ['A'],
+        ['B']
+      ],
+       [
+        ['B'],
+        ['C']
+      ]
+        
+    ];
+
+
+    var result = minCoverFunction(X, F);
+    // F′now becomes {C→A, C→B, D→E, D→H, A→C, B→D}
+    var expected = [
+      [
+        ['A'],
+        ['B']
+      ],
+      [
+        ['B'],
+        ['C']
+      ]
+      
+    ];
+    expects(result).to.be.an('array');
+    assert.equal(result.length, expected.length);
+    _.forEach(result, function(a, i) {
+      assert(_.isEqual(a[0], expected[i][0]), 'arrays must be equal');
+      assert(_.isEqual(a[1], expected[i][1]), 'arrays must be equal');
+    });
+    done();
+  });
   it('should throw error on incorrect input params', function(done) {
     var set = 'loljk';
     expects(minCoverFunction.bind(set)).to.throw(TypeError);
